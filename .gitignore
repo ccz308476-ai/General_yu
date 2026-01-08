@@ -1,0 +1,9 @@
+dataset/
+deim_outputs/
+__pycache__/
+*.pyc
+*.pth
+*.pt
+*.log
+.vscode/
+.DS_Store

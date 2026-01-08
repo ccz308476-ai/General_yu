@@ -1,0 +1,164 @@
+
+
+退出这个界面（不停止训练），然后关机
+ “分离” (Detach) 操作：
+
+tmux new -s training
+
+按键动作：
+按住Ctrl
+按一下B键
+按一下 D 键。
+预期结果：
+屏幕会瞬间跳回原来的命令行界面。
+你会看到一行字：[detached] (from session training)。
+
+tmux attach -t training
+
+
+
+----------------------------------------------------------conda----------------------------------------------------------------------
+
+
+# ========== 1. 基础验证与环境查看 ==========
+conda --version  # 查看conda版本（验证是否可用）
+conda env list   # 查看所有已创建环境（*标注当前激活环境）
+conda info --envs# 同上，备选指令
+
+# ========== 2. 环境创建与激活 ==========
+conda create -n myenv python=3.10  # 创建名为myenv、Python3.10的环境（替换myenv和版本号）
+conda create -n ml_env python=3.9 numpy pandas  # 创建时直接安装依赖包
+conda activate myenv  # 激活指定环境（Windows/Linux/Mac通用）
+conda deactivate      # 退出当前激活的环境
+
+# ========== 3. 环境删除 ==========
+conda remove -n myenv --all  # 彻底删除名为myenv的环境（谨慎使用）
+
+# ========== 4. 包管理（激活环境后使用） ==========
+conda install numpy  # 安装指定包（默认最新版）
+conda install numpy=1.26  # 安装指定版本的包
+conda install numpy pandas matplotlib  # 一次性安装多个包
+conda install -c conda-forge torch  # 从conda-forge通道安装包（解决部分包下载问题）
+pip install requests  # conda找不到的包，用pip安装（激活环境后pip已关联当前环境）
+
+conda update numpy  # 更新指定包
+conda update --all  # 更新当前环境所有包
+
+conda remove numpy  # 卸载指定包
+conda list  # 查看当前环境已安装的所有包
+conda search numpy  # 搜索conda仓库中的包（查看可用版本）
+
+# ========== 5. 环境 导出与导入（迁移环境） ==========
+conda env export > environment.yml  # 导出当前环境配置到yml文件（含包和版本）
+conda env create -f environment.yml  # 从yml文件创建完全相同的环境
+
+# ========== 6. 常用配置 ==========
+conda config --show  # 查看conda所有配置
+conda config --add channels conda-forge  # 添加conda-forge通道（优先下载源）
+conda config --set show_channel_urls yes  # 显示包的下载通道（便于调试）
+conda clean -p  # 清理未使用的包缓存（释放空间）
+conda clean -y --all  # 彻底清理所有缓存（包、索引等）
+
+
+---------------------------------------------------ubuntu------------------------------------------------------------------------
+
+
+# ========== 1. 目录（文件夹）操作 ==========
+cd ./docs               # 进入当前目录下的 docs 子文件夹（相对路径）
+cd /home/xxx/project    # 进入绝对路径目录（xxx替换为你的用户名）
+cd ..                   # 回到上一级目录
+cd ~                    # 回到用户主目录（快捷路径）
+pwd                     # 查看当前所在目录的完整路径
+ls                      # 列出当前目录下所有文件/文件夹（简洁模式）
+ls -l                   # 详细列出（权限、所有者、大小、修改时间）
+ls -a                   # 显示所有文件（包括隐藏文件，以.开头）
+ls -la                  # 详细显示所有文件（含隐藏文件）
+mkdir new_folder        # 创建单个新文件夹
+mkdir -p dir1/dir2/dir3 # 递归创建多级文件夹（父目录不存在则自动创建）
+rmdir empty_dir         # 删除空文件夹（仅空文件夹可用）
+rm -rf target_dir       # 强制删除文件夹及内部所有内容（谨慎使用！不可恢复）
+
+# ========== 2. 文件操作 ==========
+touch test.txt          # 创建空文件（可替换为任意后缀，如.py/.sh）
+echo "Hello Ubuntu" > test.txt  # 创建文件并写入内容（覆盖原有内容）
+echo "追加内容" >> test.txt    # 向文件尾部追加内容（不覆盖原有）
+cat test.txt            # 查看文件完整内容
+head -5 test.txt        # 查看文件前5行
+tail -3 test.txt        # 查看文件后3行
+tail -f log.txt         # 实时监听文件更新（如日志文件，Ctrl+C退出）
+cp test.txt ./docs/     # 复制文件到指定目录
+cp -r src_dir dest_dir  # 递归复制文件夹及内容到目标目录
+mv old.txt new.txt      # 重命名文件/文件夹
+mv test.txt ./docs/     # 移动文件到指定目录
+rm test.txt             # 删除单个文件
+rm -f test.txt          # 强制删除文件（忽略不存在的文件，无提示）
+nano test.txt           # 用终端编辑器打开文件（简单编辑，Ctrl+O保存，Ctrl+X退出）
+vim test.txt            # 用Vim编辑器打开文件（按i编辑，Esc+:+wq保存退出）
+
+# ========== 3. 系统与软件管理 ==========
+sudo apt update         # 更新软件源索引（获取最新软件版本信息）
+sudo apt upgrade -y     # 升级所有已安装软件（-y自动确认，无需手动输入y）
+sudo apt install git    # 安装指定软件（例：安装Git，替换git为其他软件名）
+sudo apt install python3 python3-pip  # 一次性安装多个软件
+sudo apt remove git     # 卸载软件（保留配置文件）
+sudo apt purge git      # 彻底卸载软件（删除配置文件）
+sudo apt autoremove -y  # 自动清理无用依赖包（释放空间）
+df -h                   # 查看磁盘空间使用情况（-h以人类可读单位显示）
+free -h                 # 查看内存使用情况
+top                     # 查看系统进程（实时占用CPU/内存，Ctrl+C退出）
+htop                    # 更美观的进程查看工具（需先安装：sudo apt install htop）
+sudo reboot             # 重启系统
+sudo shutdown -h now    # 立即关机
+
+# ========== 4. 权限管理（Ubuntu核心） ==========
+ls -l                   # 查看文件/文件夹的权限（首列如-rw-r--r--）
+sudo chmod +x script.sh # 给脚本文件添加执行权限（最常用）
+sudo chmod 755 file.py  # 配置权限：所有者读/写/执行，其他读/执行
+sudo chmod 644 test.txt # 配置权限：所有者读/写，其他只读
+sudo chown username:username test.txt  # 修改文件所有者（替换为你的用户名）
+sudo chown -R username:username dir   # 递归修改文件夹及内容的所有者
+
+# ========== 5. 开发相关（程序员常用） ==========
+# Python相关
+python3 --version       # 查看Python3版本
+pip3 --version          # 查看pip3版本
+pip3 install numpy pandas  # 安装Python包
+pip3 install -r requirements.txt  # 从依赖文件安装所有包
+pip3 uninstall numpy    # 卸载Python包
+pip3 list               # 查看已安装的Python包
+
+# Git相关
+git --version           # 查看Git版本
+git init                # 初始化本地Git仓库
+git clone https://github.com/xxx.git  # 克隆远程仓库
+git add .               # 将所有修改添加到暂存区
+git commit -m "提交说明" # 提交暂存区内容到本地仓库
+git push                # 推送到远程仓库
+git pull                # 从远程仓库拉取更新
+git status              # 查看仓库状态
+
+# 压缩/解压
+tar -zcvf package.tar.gz target_dir  # 压缩文件夹为tar.gz格式
+tar -zxvf package.tar.gz             # 解压tar.gz格式文件
+unzip file.zip                       # 解压zip格式文件（需先安装：sudo apt install unzip）
+zip -r output.zip target_dir         # 压缩文件夹为zip格式
+
+# ========== 6. 网络相关 ==========
+ping www.baidu.com      # 测试网络连通性（Ctrl+C退出）
+curl https://www.baidu.com  # 发送HTTP请求，查看响应
+wget https://xxx.com/file.zip  # 下载网络文件到当前目录
+ifconfig                # 查看网卡信息（需安装：sudo apt install net-tools）
+ip addr                 # 查看IP地址（Ubuntu默认自带）
+sudo ufw status         # 查看防火墙状态
+sudo ufw enable         # 开启防火墙
+sudo ufw disable        # 关闭防火墙
+
+# ========== 7. 其他实用指令 ==========
+clear                   # 清空终端屏幕（快捷键Ctrl+L更方便）
+history                 # 查看终端历史命令（按↑↓键可快速调用）
+which python3           # 查看命令/程序的安装路径
+sudo find / -name "test.txt"  # 从根目录搜索名为test.txt的文件
+grep "关键词" test.txt  # 在文件中搜索关键词
+grep -r "关键词" ./dir  # 递归搜索目录下所有文件中的关键词
+
+
